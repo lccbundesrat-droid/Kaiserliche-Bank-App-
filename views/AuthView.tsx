@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShieldCheck, UserPlus, LogIn, Lock, User as UserIcon, AlertCircle, Crown } from 'lucide-react';
+import { ShieldCheck, UserPlus, LogIn, Lock, User as UserIcon, AlertCircle, Crown, Eye, EyeOff } from 'lucide-react';
 import { registerUser, isDeviceLocked } from '../utils/db';
 
 interface Props {
@@ -15,6 +15,8 @@ const AuthView: React.FC<Props> = ({ onLogin, onAdminLogin, error, setError }) =
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [adminPass, setAdminPass] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
 
   const deviceLock = isDeviceLocked();
 
@@ -77,12 +79,19 @@ const AuthView: React.FC<Props> = ({ onLogin, onAdminLogin, error, setError }) =
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-400" size={18} />
                 <input 
-                  type="password" 
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-amber-50/50 border-2 border-amber-100 rounded-xl focus:border-amber-500 outline-none transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-amber-50/50 border-2 border-amber-100 rounded-xl focus:border-amber-500 outline-none transition-all"
                   placeholder="Passwort"
                 />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-500 hover:text-amber-700 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -102,10 +111,10 @@ const AuthView: React.FC<Props> = ({ onLogin, onAdminLogin, error, setError }) =
             </button>
 
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-amber-700">
-              <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(null); }} className="hover:text-amber-900 underline">
+              <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(null); setShowPassword(false); }} className="hover:text-amber-900 underline">
                 {mode === 'login' ? 'Noch kein Konto? Registrieren' : 'Bereits registriert? Anmelden'}
               </button>
-              <button onClick={() => { setMode('admin'); setError(null); }} className="opacity-50 hover:opacity-100">
+              <button onClick={() => { setMode('admin'); setError(null); setShowAdminPassword(false); }} className="opacity-50 hover:opacity-100">
                 Admin
               </button>
             </div>
@@ -117,12 +126,19 @@ const AuthView: React.FC<Props> = ({ onLogin, onAdminLogin, error, setError }) =
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-red-600" size={18} />
                 <input 
-                  type="password" 
+                  type={showAdminPassword ? "text" : "password"}
                   value={adminPass}
                   onChange={(e) => setAdminPass(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-red-50/50 border-2 border-red-200 rounded-xl focus:border-red-500 outline-none transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-red-50/50 border-2 border-red-200 rounded-xl focus:border-red-500 outline-none transition-all"
                   placeholder="Admin-Passwort"
                 />
+                <button 
+                  type="button"
+                  onClick={() => setShowAdminPassword(!showAdminPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-600 transition-colors"
+                >
+                  {showAdminPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
             
@@ -141,7 +157,7 @@ const AuthView: React.FC<Props> = ({ onLogin, onAdminLogin, error, setError }) =
               Authorisieren
             </button>
 
-            <button onClick={() => setMode('login')} className="w-full text-xs font-bold text-amber-700 hover:text-amber-900 pt-2">
+            <button onClick={() => { setMode('login'); setShowPassword(false); }} className="w-full text-xs font-bold text-amber-700 hover:text-amber-900 pt-2">
               Zurück zur Anmeldung
             </button>
           </div>
