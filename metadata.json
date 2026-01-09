@@ -1,0 +1,5 @@
+{
+  "name": "Kaiserliche Bank App",
+  "description": "Die offizielle Banking-App der Kaiserlichen Bank zur Verwaltung von KBG, KBP-Stufen und Transaktionen mit imperialem Design.",
+  "requestFramePermissions": []
+}
